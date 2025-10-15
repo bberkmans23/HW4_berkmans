@@ -230,8 +230,24 @@ class myHashMap<K,V> {
          * the return value discussion in this method's prologue to make sure the correct
          * return value is returned the invoking function based on the remove outcome.
          */
-
-        return null;
+            int index = getBucketIndex(key);
+            HashNode<K, V> head = bucket.get(index);
+            HashNode<K, V> prev = null;
+        
+            while (head != null) {
+                if (head.key.equals(key)) {
+                    if (prev == null) {
+                        bucket.set(index, head.next);
+                    } else {
+                        prev.next = head.next;
+                    }
+                    size--;
+                    return head.value;
+                }
+                prev = head;
+                head = head.next;
+            }
+            return null;
     }
 
 
@@ -405,8 +421,17 @@ class myHashMap<K,V> {
          * Make sure you return the proper value based on the outcome of this method's
          * replace (see method's prologue above).
          */
-
-        return val;
+        int index = getBucketIndex(key);
+        HashNode<K, V> head = bucket.get(index);
+        while (head != null) {
+            if (head.key.equals(key)) {
+                V old = head.value;
+                head.value = val;
+                return old;
+            }
+            head = head.next;
+        }
+        return null;
     }
 
     
@@ -433,7 +458,20 @@ class myHashMap<K,V> {
          * This method should apply the precondition (aka, the Key already exists with the
          * value 'oldval', and is so, it SHOULD call replace(K, V) for code reuse.
          */
-
+        int index = getBucketIndex(key);
+        HashNode<K, V> head = bucket.get(index);
+        while (head != null) {
+            if (head.key.equals(key)) {
+                if ((head.value == null && oldVal == null) ||
+                    (head.value != null && head.value.equals(oldVal))) {
+                    replace(key, newVal);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            head = head.next;
+        }
         return false;
     }
 
