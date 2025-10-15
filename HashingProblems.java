@@ -40,8 +40,20 @@ class HashingProblems {
          * returning 0.0 is NOT correct, as that is not the average value. Whereas
          * returning 0.0/0.0 IS correct (which would return a non-number).
          */
-
-         return 0.0 / 0.0;
+        if (map == null || array == null) return 0.0 / 0.0; // NaN
+        
+            long sum = 0;
+            int count = 0;
+        
+            for (int key : array) {
+                Integer v = map.get(key);
+                if (v != null) {
+                    sum += v;
+                    count++;
+                }
+            }
+        if (count == 0) return 0.0 / 0.0;
+        return ((double) sum) / count;
   }
 
 
@@ -62,8 +74,16 @@ class HashingProblems {
        * Hint: Consider iterating over the HashMap using the keySet method.
        */
 
-
-      return result;
+        if (map == null || map.isEmpty()) return result;
+    
+        ArrayList<Integer> oddKeys = new ArrayList<>();
+        for (Integer k : map.keySet()) {
+            if (k % 2 != 0) oddKeys.add(k);
+        }
+        Collections.sort(oddKeys);
+    
+        for (Integer k : oddKeys) result.add(map.get(k));
+        return result;
   }
 
 
@@ -109,8 +129,15 @@ class HashingProblems {
       /*
        * ADD YOUR CODE HERE
        */
+    if (numbers == null) return 0;
+    HashSet<Integer> seen = new HashSet<>();
+    for (int x : numbers) seen.add(x);
 
-      return -1;
+    int count = 0;
+    for (int x : numbers) {
+        if (seen.contains(x + k)) count++;
+    }
+    return count;
   }
 
 } /* end class HashingProblems */
